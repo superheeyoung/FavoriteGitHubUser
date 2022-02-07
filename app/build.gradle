@@ -35,14 +35,6 @@ android {
     android { buildFeatures { viewBinding = true } }
 }
 
-
-/*
-androidExtensions {
-    experimental = true
-}
-*/
-
-
 dependencies {
 
     implementation 'androidx.core:core-ktx:1.7.0'
@@ -93,9 +85,6 @@ dependencies {
     //glide
     implementation 'com.github.bumptech.glide:glide:4.12.0'
     annotationProcessor 'com.github.bumptech.glide:compiler:4.12.0'
-
-    //anko
-    implementation 'org.jetbrains.anko:anko:0.10.8'
 
     //room
     implementation "androidx.room:room-runtime:2.3.0"

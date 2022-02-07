@@ -4,22 +4,20 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.Toast
 import androidx.core.view.isVisible
+import androidx.core.widget.doAfterTextChanged
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.favoritesgithubapi.databinding.ActivityGithubSearchUsersBinding
 import com.example.presentation.extension.onSearch
 import com.example.presentation.viewModel.GithubUserMainViewModel
-import org.jetbrains.anko.clearTop
 import com.example.presentation.extension.Result
-import com.example.presentation.extension.addTextChangedListener
+import com.example.presentation.extension.launchActivity
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
 import io.reactivex.rxjava3.disposables.CompositeDisposable
 import io.reactivex.rxjava3.kotlin.plusAssign
 import io.reactivex.rxjava3.subjects.BehaviorSubject
-import org.jetbrains.anko.intentFor
-import org.jetbrains.anko.noAnimation
-import org.jetbrains.anko.singleTop
 import org.koin.android.ext.android.inject
 import java.util.concurrent.TimeUnit
+
 /*
 * GithubApi를 이용하여 검색한 유저의 목록을 불러오는 클래스입니다.
 * */
@@ -57,20 +55,16 @@ class GithubSearchUsersActivity : AppCompatActivity() {
             if (it.isNotBlank()) etSearchName = it
         }
 
-        binding.etSearch.addTextChangedListener(onTextChanged = { search, _, _, _ ->
-            subject.onNext(search.toString())
-        })
+        binding.etSearch.doAfterTextChanged {
+            subject.onNext(binding.etSearch.text.toString())
+        }
 
         binding.btnSearch.setOnClickListener {
             githubUserMainViewModel.searchGithubUser(etSearchName)
         }
 
         binding.btnFavoriteUser.setOnClickListener {
-            with(this) {
-                startActivity(
-                    intentFor<FavoriteGithubUserActivity>().clearTop().singleTop().noAnimation()
-                )
-            }
+            launchActivity<FavoriteGithubUserActivity>()
         }
 
         githubUserMainViewModel.searchResultEvent.observe(this) {

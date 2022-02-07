@@ -6,12 +6,8 @@ import io.reactivex.rxjava3.core.Single
 
 class GithubUserRemoteSourceImpl(private val githubApi: GithubApi) : GithubUserRemoteSource {
     override fun searchGithubUser(userName: String): Single<List<GithubUserEntity>> {
-        return githubApi.getGithubUser(userName).compose {
-            it.onErrorResumeNext { e ->
-                Single.error(e)
-            }.map {
-                it.items
-            }
+        return githubApi.getGithubUser(userName).map {
+            it.items
         }
     }
 }
